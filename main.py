@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 
+from database import database
+
 app = FastAPI()
 
 
 @app.on_event("startup")
 async def startup():
-    pass
+    await database.connect()
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    pass
+    await database.disconnect()
