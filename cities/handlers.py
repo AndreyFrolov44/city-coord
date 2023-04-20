@@ -9,7 +9,7 @@ from geopy.geocoders import Nominatim
 from fastapi import HTTPException, status
 
 from cities.models import cities
-from cities.schemas import City
+from cities.schemas import City, CityDistance
 
 
 async def get_locations(city_name: str) -> Optional[List[Location]]:
@@ -89,7 +89,7 @@ async def get_nearest_cities_handler(lat: float, lon: float, session: AsyncSessi
     query = (
         select(
             cities,
-            func.ST_Distance(
+            func.ST_DistanceSphere(
                 func.ST_MakePoint(cities.c.lon, cities.c.lat),
                 func.ST_MakePoint(lon, lat)
             ).label('distance')
@@ -98,4 +98,4 @@ async def get_nearest_cities_handler(lat: float, lon: float, session: AsyncSessi
         .limit(2)
     )
     result = await session.execute(query)
-    return [City(name=city.name, lat=city.lat, lon=city.lon) for city in result.all()]
+    return [CityDistance(name=city.name, lat=city.lat, lon=city.lon, distance=city.distance) for city in result.all()]
