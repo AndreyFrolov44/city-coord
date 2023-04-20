@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from geopy import Location
 from geopy.adapters import AioHTTPAdapter
+from sqlalchemy import delete, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from geopy.geocoders import Nominatim
@@ -65,3 +66,22 @@ async def create_city_handler(city_name: str, session: AsyncSession) -> List[Cit
                 lat=city.lat,
                 lon=city.lon
             ) for city in insert_cities]
+
+
+async def delete_city_handler(name: str, session: AsyncSession):
+    query = delete(cities).where(cities.c.name == name).returning(cities.c.name)
+    result = await session.execute(query)
+    if not result.all():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='City not found')
+    await session.commit()
+
+
+async def get_by_city_name(name: str, session: AsyncSession) -> City:
+    query = select(cities).where(cities.c.name == name)
+    result = await session.execute(query)
+    city = result.first()
+    if not city:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='City not found')
+    return City(name=city.name, lat=city.lat, lon=city.lon)
+
+
