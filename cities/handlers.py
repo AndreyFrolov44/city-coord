@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from geopy import Location
 from geopy.adapters import AioHTTPAdapter
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, func
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 from geopy.geocoders import Nominatim
@@ -85,3 +85,17 @@ async def get_by_city_name(name: str, session: AsyncSession) -> City:
     return City(name=city.name, lat=city.lat, lon=city.lon)
 
 
+async def get_nearest_cities_handler(lat: float, lon: float, session: AsyncSession) -> List[City]:
+    query = (
+        select(
+            cities,
+            func.ST_Distance(
+                func.ST_MakePoint(cities.c.lon, cities.c.lat),
+                func.ST_MakePoint(lon, lat)
+            ).label('distance')
+        )
+        .order_by('distance')
+        .limit(2)
+    )
+    result = await session.execute(query)
+    return [City(name=city.name, lat=city.lat, lon=city.lon) for city in result.all()]

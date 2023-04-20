@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cities.handlers import create_city_handler, delete_city_handler, get_by_city_name
+from cities.handlers import create_city_handler, delete_city_handler, get_by_city_name, get_nearest_cities_handler
 from cities.schemas import City
 from database import get_async_session
 
@@ -23,3 +23,8 @@ async def delete_city(name: str, session: AsyncSession = Depends(get_async_sessi
 @router.get('')
 async def get_city(name: str, session: AsyncSession = Depends(get_async_session)):
     return await get_by_city_name(name, session)
+
+
+@router.get('/nearest')
+async def get_nearest_cities(lat: float, lon: float, session: AsyncSession = Depends(get_async_session)):
+    return await get_nearest_cities_handler(lat, lon, session)
