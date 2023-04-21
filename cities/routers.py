@@ -16,13 +16,13 @@ async def create_city(city_name: str, session: AsyncSession = Depends(get_async_
 
 
 @router.delete('/delete')
-async def delete_city(name: str, session: AsyncSession = Depends(get_async_session)):
-    return await delete_city_handler(name, session)
+async def delete_city(city_name: str, session: AsyncSession = Depends(get_async_session)):
+    return await delete_city_handler(city_name, session)
 
 
 @router.get('')
-async def get_city(name: str, session: AsyncSession = Depends(get_async_session)):
-    return await get_by_city_name(name, session)
+async def get_city(city_name: str, session: AsyncSession = Depends(get_async_session)):
+    return await get_by_city_name(city_name, session)
 
 
 @router.get('/nearest')
