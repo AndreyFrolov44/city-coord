@@ -1,6 +1,6 @@
 from httpx import AsyncClient
 
-from cities.handlers import create_city_handler
+from app.cities.handlers import create_city_handler
 from tests.conftest import async_session_maker
 
 

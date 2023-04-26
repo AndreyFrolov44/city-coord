@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from geopy.geocoders import Nominatim
 from fastapi import HTTPException, status
 
-from cities.models import cities
-from cities.schemas import City, CityDistance
+from app.cities.models import cities
+from app.cities.schemas import City, CityDistance
 
 
 async def get_locations(city_name: str) -> Optional[List[Location]]:

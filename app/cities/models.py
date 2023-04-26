@@ -1,7 +1,7 @@
 import sqlalchemy
 
 
-from database import metadata
+from app.database import metadata
 
 cities = sqlalchemy.Table(
     "cities",

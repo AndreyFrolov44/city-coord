@@ -7,7 +7,7 @@ from alembic import context
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from core.config import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB, POSTGRES_PORT
+from app.core.config import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB, POSTGRES_PORT
 
 config = context.config
 
@@ -19,8 +19,8 @@ config.set_section_option(section, "POSTGRES_DB", POSTGRES_DB)
 config.set_section_option(section, "POSTGRES_PORT", POSTGRES_PORT)
 fileConfig(config.config_file_name)
 
-from cities.models import cities
-from database import metadata
+from app.cities.models import cities
+from app.database import metadata
 target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,

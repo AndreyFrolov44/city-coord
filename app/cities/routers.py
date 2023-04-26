@@ -3,9 +3,9 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cities.handlers import create_city_handler, delete_city_handler, get_by_city_name, get_nearest_cities_handler
-from cities.schemas import City
-from database import get_async_session
+from app.cities.handlers import create_city_handler, delete_city_handler, get_by_city_name, get_nearest_cities_handler
+from app.cities.schemas import City
+from app.database import get_async_session
 
 router = APIRouter(prefix='/cities', tags=['cities'])
 
